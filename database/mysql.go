@@ -64,3 +64,15 @@ func (m *Mysql) IsEmailExist(email string) bool {
 	}
 	return total > 0
 }
+
+func (m *Mysql) FindUserByEmail(email string) model.User {
+	return model.User{}
+}
+
+func (m *Mysql) CreateToken(token model.Token) model.Token {
+	return model.Token{}
+}
+
+func (m *Mysql) CreateLogin(login model.Login) {
+
+}

@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"time"
 
 	"github.com/go-redis/redis"
 )
@@ -32,4 +33,17 @@ func NewRedis(opt RedisOption) (Redis, error) {
 
 	log.Printf("Success connecting Redis to %s:%s with pass %s\n", opt.Host, opt.Port, opt.Password)
 	return Redis{redis: client}, nil
+}
+
+func (r *Redis) IsTokenValid(token string) bool {
+	_, err := r.redis.Get("token:" + token).Result()
+	return err != redis.Nil
+}
+
+func (r *Redis) AddToken(token string, userId int64, time time.Duration) {
+
+}
+
+func (r *Redis) GetUserId(token string) int64 {
+	return 0
 }
