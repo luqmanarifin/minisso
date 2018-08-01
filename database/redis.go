@@ -14,7 +14,11 @@ type RedisOption struct {
 	Database int
 }
 
-func NewRedis(opt RedisOption) (*redis.Client, error) {
+type Redis struct {
+	redis *redis.Client
+}
+
+func NewRedis(opt RedisOption) (Redis, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     opt.Host + ":" + opt.Port,
 		Password: opt.Password,
@@ -23,9 +27,9 @@ func NewRedis(opt RedisOption) (*redis.Client, error) {
 	pong, err := client.Ping().Result()
 	log.Println(pong, err)
 	if err != nil {
-		return &redis.Client{}, err
+		return Redis{}, err
 	}
 
 	log.Printf("Success connecting Redis to %s:%s with pass %s\n", opt.Host, opt.Port, opt.Password)
-	return client, nil
+	return Redis{redis: client}, nil
 }

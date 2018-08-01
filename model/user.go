@@ -15,6 +15,6 @@ type User struct {
 	LatestLogin time.Time `json:"latest_login"`
 	LastIp      string    `json:"last_ip"`
 	Connection  string    `json:"connection"`
-	Created     time.Time `xorm:"created" json:"created"`
-	Updated     time.Time `xorm:"updated" json:"updated"`
+	CreatedAt   time.Time `xorm:"created" json:"created"`
+	UpdatedAt   time.Time `xorm:"updated" json:"updated"`
 }

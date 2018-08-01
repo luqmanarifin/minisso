@@ -40,6 +40,9 @@ func NewXorm(opt MysqlOption) (Mysql, error) {
 	}
 
 	// syncing table
+	db.Sync2(new(model.Application))
+	db.Sync2(new(model.Login))
+	db.Sync2(new(model.Token))
 	db.Sync2(new(model.User))
 
 	log.Printf("Success connecting MySQL to %s:%s with pass %s\n", opt.Host, opt.Port, opt.Password)
@@ -51,4 +54,13 @@ func (m *Mysql) CreateUser(user model.User) {
 	if err != nil {
 		log.Printf("%d error %s", affected, err)
 	}
+}
+
+func (m *Mysql) IsEmailExist(email string) bool {
+	user := new(model.User)
+	total, err := m.xorm.Where("email=?", email).Count(user)
+	if err != nil {
+		log.Printf("Error when query whether email exist or not")
+	}
+	return total > 0
 }

@@ -29,14 +29,14 @@ func main() {
 	openEnv()
 
 	mysqlOption := getMysqlOption()
-	// redisOption := getRedisOption()
-	userService := service.NewUserService(mysqlOption)
+	redisOption := getRedisOption()
+	userService := service.NewUserService(mysqlOption, redisOption)
 
 	router := httprouter.New()
 	router.GET("/healthz", Healthz)
 	router.GET("/metrics", Metric)
 
-	// router.GET("/signup", userService.Signup)
+	router.POST("/cookie", userService.Cookie)
 	router.POST("/signup", userService.Signup)
 
 	fmt.Println("Starting HTTP Receiver")
