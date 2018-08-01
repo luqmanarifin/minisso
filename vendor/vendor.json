@@ -15,6 +15,12 @@
 			"revisionTime": "2018-05-17T05:48:28Z"
 		},
 		{
+			"checksumSHA1": "iOz1fQO1HuleWlMBQ2Hnapu4Ud4=",
+			"path": "github.com/bukalapak/packen/response",
+			"revision": "09d2770ef17290d59f3f6dbf984e052e270123f7",
+			"revisionTime": "2018-05-17T05:48:28Z"
+		},
+		{
 			"checksumSHA1": "iXQlbJJGmkkHPdBkDx8Ll1i1S1c=",
 			"path": "github.com/go-redis/redis",
 			"revision": "0f9028adf0837cf93c9705817493e5f6997cf026",

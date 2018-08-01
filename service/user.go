@@ -6,7 +6,6 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/luqmanarifin/minisso/database"
-	"github.com/luqmanarifin/minisso/model"
 )
 
 type UserService struct {
@@ -24,17 +23,33 @@ func NewUserService(mysqlOption database.MysqlOption) UserService {
 }
 
 func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	user := model.User{
-		FirstName: "Luqman",
-		LastName:  "Arifin",
+	cookie, err := r.Cookie("kentang")
+	if err != nil {
+		log.Printf("ambil cookie error")
+	} else {
+		log.Printf("cookie %s: %s", cookie.Name, cookie.Value)
 	}
-	u.mysql.CreateUser(user)
+	setCookie := http.Cookie{Name: "luqman", Value: "ganteng"}
+	http.SetCookie(w, &setCookie)
+	HandleResponse(w, "", "ok", 200)
+
+	// if there is cookie and valid, 200 ok already loggedin
+
+	// if email already available, 200 ok reject
+
+	// 201 created and give token
 }
 
-func Login(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	// if there is cookie and valid, 200 ok already loggedin
 
+	// if user pass invalid, 200 wrong password
+
+	// 200 ok give token
 }
 
-func Validate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (u *UserService) Validate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	// if there is cookie and valid, 200 ok give user info
 
+	// 200 wrong password
 }

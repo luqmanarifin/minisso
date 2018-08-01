@@ -36,7 +36,8 @@ func main() {
 	router.GET("/healthz", Healthz)
 	router.GET("/metrics", Metric)
 
-	router.GET("/signup", userService.Signup)
+	// router.GET("/signup", userService.Signup)
+	router.POST("/signup", userService.Signup)
 
 	fmt.Println("Starting HTTP Receiver")
 	http.ListenAndServe(":1234", router)

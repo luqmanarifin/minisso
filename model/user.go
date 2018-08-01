@@ -3,18 +3,18 @@ package model
 import "time"
 
 type User struct {
-	ID          int64
-	UserId      int64
-	FirstName   string
-	LastName    string
-	Picture     string
-	Gender      string
-	Email       string
-	Password    string
-	Role        string
-	LatestLogin time.Time
-	LastIp      string
-	Connection  string
-	Created     time.Time `xorm:"created"`
-	Updated     time.Time `xorm:"updated"`
+	Id          int64     `json:"id"`
+	UserId      string    `json:"user_id"`
+	FirstName   string    `json:"first_name"`
+	LastName    string    `json:"last_name"`
+	Picture     string    `xorm:"text" json:"picture"`
+	Gender      string    `json:"gender"`
+	Email       string    `json:"email"`
+	Password    string    `json:"password"`
+	Role        string    `json:"role"`
+	LatestLogin time.Time `json:"latest_login"`
+	LastIp      string    `json:"last_ip"`
+	Connection  string    `json:"connection"`
+	Created     time.Time `xorm:"created" json:"created"`
+	Updated     time.Time `xorm:"updated" json:"updated"`
 }
