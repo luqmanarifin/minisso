@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	TOKEN_LIFETIME = 5 * time.Minute
+	TOKEN_LIFETIME = time.Minute
 	COOKIE_NAME    = "minisso"
 )
 
