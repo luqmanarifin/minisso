@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -60,12 +61,14 @@ func WriteSuccess(w http.ResponseWriter, data interface{}, status int) {
 
 func ExtractCredential(r *http.Request) (user model.User, token string, err error) {
 	if err = Decode(r, &user); err != nil {
+		log.Printf("decoding user error")
 		return
 	}
 	cookie, err := r.Cookie(COOKIE_NAME)
 	if err == nil {
 		token = cookie.Value
 	}
+	err = nil
 	return
 }
 

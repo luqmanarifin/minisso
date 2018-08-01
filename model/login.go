@@ -7,6 +7,6 @@ type Login struct {
 	UserId        int64     `json:"user_id"`
 	ApplicationId int64     `json:"application_id"`
 	Token         string    `json:"token"`
-	Datetime      time.Time `json:"datetime" xorm:"created"`
+	CreatedAt     time.Time `json:"created_at" xorm:"created"`
 	Status        string    `json:"status"`
 }

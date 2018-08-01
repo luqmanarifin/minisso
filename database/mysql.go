@@ -66,21 +66,46 @@ func (m *Mysql) IsEmailExist(email string) bool {
 }
 
 func (m *Mysql) FindUserById(id int64) model.User {
-	return model.User{}
+	var user = model.User{Id: id}
+	has, _ := m.xorm.Get(&user)
+	if has {
+		return user
+	} else {
+		return model.User{}
+	}
 }
 
 func (m *Mysql) FindUserByEmail(email string) model.User {
-	return model.User{}
+	var user = model.User{Email: email}
+	has, _ := m.xorm.Get(&user)
+	if has {
+		return user
+	} else {
+		return model.User{}
+	}
 }
 
-func (m *Mysql) FindUserByEmailAndPass(user model.User) (model.User, error) {
-	return model.User{}, nil
+func (m *Mysql) FindToken(tokenString string) model.Token {
+	var token = model.Token{Token: tokenString}
+	has, _ := m.xorm.Get(&token)
+	if has {
+		return token
+	} else {
+		return model.Token{}
+	}
 }
 
 func (m *Mysql) CreateToken(token model.Token) model.Token {
-	return model.Token{}
+	affected, err := m.xorm.Insert(&token)
+	if err != nil {
+		log.Printf("%d error %s", affected, err)
+	}
+	return m.FindToken(token.Token)
 }
 
 func (m *Mysql) CreateLogin(login model.Login) {
-
+	affected, err := m.xorm.Insert(&login)
+	if err != nil {
+		log.Printf("%d error %s", affected, err)
+	}
 }

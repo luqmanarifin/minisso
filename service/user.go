@@ -48,19 +48,21 @@ func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params http
 
 	// TODO: check if app is authorized
 
-	// if there is cookie and valid, redirect to login
+	// if there is cookie and valid
 	if u.redis.IsTokenValid(tokenString) {
-		u.Login(w, r, params)
+		u.handleTokenValid(w, tokenString)
+		return
 	}
 
 	// if email already available, 401 reject
 	if u.mysql.IsEmailExist(user.Email) {
 		HandleResponse(w, nil, "Email already exists.", 401)
+		return
 	}
 
 	// 200 created and give token
 	u.mysql.CreateUser(user)
-	u.handleLoggedIn(w, user)
+	u.handleLoggedIn(w, u.mysql.FindUserByEmail(user.Email))
 }
 
 func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
