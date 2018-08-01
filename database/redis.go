@@ -1,7 +1,9 @@
 package database
 
 import (
+	"fmt"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -41,9 +43,11 @@ func (r *Redis) IsTokenValid(token string) bool {
 }
 
 func (r *Redis) AddToken(token string, userId int64, time time.Duration) {
-
+	r.redis.Set("token:"+token, fmt.Sprint(userId), time)
 }
 
 func (r *Redis) GetUserId(token string) int64 {
-	return 0
+	val, _ := r.redis.Get("token:" + token).Result()
+	n, _ := strconv.ParseInt(val, 10, 64)
+	return n
 }

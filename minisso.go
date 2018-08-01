@@ -38,8 +38,8 @@ func main() {
 
 	router.POST("/cookie", userService.Cookie)
 	router.POST("/signup", userService.Signup)
-	router.GET("/login", userService.Login)
-	router.GET("/validate", userService.Validate)
+	router.POST("/login", userService.Login)
+	router.POST("/validate", userService.Validate)
 
 	fmt.Println("Starting HTTP Receiver")
 	http.ListenAndServe(":1234", router)
