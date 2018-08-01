@@ -62,7 +62,7 @@ func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params http
 
 	// 200 created and give token
 	u.mysql.CreateUser(user)
-	u.handleLoggedIn(w, u.mysql.FindUserByEmail(user.Email))
+	u.handleLoggedIn(w, r, u.mysql.FindUserByEmail(user.Email))
 }
 
 func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -88,7 +88,7 @@ func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httpr
 
 	// 200 ok give token
 	user = u.mysql.FindUserByEmail(user.Email)
-	u.handleLoggedIn(w, user)
+	u.handleLoggedIn(w, r, user)
 }
 
 func (u *UserService) Validate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -110,7 +110,8 @@ func (u *UserService) Validate(w http.ResponseWriter, r *http.Request, params ht
 	u.handleTokenInvalid(w)
 }
 
-func (u *UserService) handleLoggedIn(w http.ResponseWriter, user model.User) {
+func (u *UserService) handleLoggedIn(w http.ResponseWriter, r *http.Request, user model.User) {
+	user = u.mysql.TouchUserLogin(r, user)
 	token := u.mysql.CreateToken(GenerateToken(user.Id))
 	u.mysql.CreateLogin(model.Login{
 		UserId: user.Id,

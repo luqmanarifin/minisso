@@ -3,6 +3,10 @@ package database
 import (
 	"fmt"
 	"log"
+	"net/http"
+	"time"
+
+	"github.com/tomasen/realip"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
@@ -108,4 +112,11 @@ func (m *Mysql) CreateLogin(login model.Login) {
 	if err != nil {
 		log.Printf("%d error %s", affected, err)
 	}
+}
+
+func (m *Mysql) TouchUserLogin(r *http.Request, user model.User) model.User {
+	user.LatestLogin = time.Now()
+	user.LastIp = realip.FromRequest(r)
+	m.xorm.Id(user.Id).Update(user)
+	return user
 }
