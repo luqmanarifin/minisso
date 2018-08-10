@@ -120,3 +120,37 @@ func (m *Mysql) TouchUserLogin(r *http.Request, user model.User) model.User {
 	m.xorm.Id(user.Id).Update(user)
 	return user
 }
+
+func (m *Mysql) CreateApplication(app model.Application) {
+	affected, err := m.xorm.Insert(&app)
+	if err != nil {
+		log.Printf("%d error %s", affected, err)
+	}
+}
+
+func (m *Mysql) FindApplication(id int64) model.Application {
+	var app = model.Application{Id: id}
+	has, err := m.xorm.Get(&app)
+	if err != nil {
+		log.Printf("has %v error %v", has, err)
+		return model.Application{}
+	}
+	if !has {
+		return model.Application{}
+	}
+	return app
+}
+
+func (m *Mysql) UpdateApplication(app model.Application) {
+	affected, err := m.xorm.Id(app.Id).Update(&app)
+	if err != nil {
+		log.Printf("%d error %s", affected, err)
+	}
+}
+
+func (m *Mysql) DeleteApplication(app model.Application) {
+	affected, err := m.xorm.Id(app.Id).Delete(&model.Application{})
+	if err != nil {
+		log.Printf("affected %v error %s", affected, err.Error())
+	}
+}
