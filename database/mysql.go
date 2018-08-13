@@ -141,6 +141,19 @@ func (m *Mysql) FindApplication(id int64) model.Application {
 	return app
 }
 
+func (m *Mysql) FindApplicationByClientId(clientId string) model.Application {
+	var app = model.Application{ClientId: clientId}
+	has, err := m.xorm.Get(&app)
+	if err != nil {
+		log.Printf("has %v error %v", has, err)
+		return model.Application{}
+	}
+	if !has {
+		return model.Application{}
+	}
+	return app
+}
+
 func (m *Mysql) UpdateApplication(app model.Application) {
 	affected, err := m.xorm.Id(app.Id).Update(&app)
 	if err != nil {

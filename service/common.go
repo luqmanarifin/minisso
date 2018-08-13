@@ -59,8 +59,8 @@ func WriteSuccess(w http.ResponseWriter, data interface{}, status int) {
 	response.Write(w, res, status)
 }
 
-func ExtractCredential(r *http.Request) (user model.User, token string, err error) {
-	if err = Decode(r, &user); err != nil {
+func ExtractCredential(r *http.Request) (credential model.Credential, token string, err error) {
+	if err = Decode(r, &credential); err != nil {
 		log.Printf("decoding user error")
 		return
 	}

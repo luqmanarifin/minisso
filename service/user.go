@@ -40,13 +40,18 @@ func (u *UserService) Cookie(w http.ResponseWriter, r *http.Request, params http
 }
 
 func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	user, tokenString, err := ExtractCredential(r)
+	credential, tokenString, err := ExtractCredential(r)
+	user := credential.User
 	if err != nil {
 		HandleResponse(w, nil, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// TODO: check if app is authorized
+	// check if app is authorized
+	if !u.isAppAuthorized(credential.Application) {
+		HandleResponse(w, nil, "App is not authorized.", 401)
+		return
+	}
 
 	// if there is cookie and valid
 	if u.redis.IsTokenValid(tokenString) {
@@ -66,13 +71,18 @@ func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params http
 }
 
 func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	user, tokenString, err := ExtractCredential(r)
+	credential, tokenString, err := ExtractCredential(r)
+	user := credential.User
 	if err != nil {
 		HandleResponse(w, nil, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// TODO: check if app is authorized
+	// check if app is authorized
+	if !u.isAppAuthorized(credential.Application) {
+		HandleResponse(w, nil, "App is not authorized.", 401)
+		return
+	}
 
 	// if there is cookie and valid, 200 give current token
 	if u.redis.IsTokenValid(tokenString) {
@@ -92,13 +102,17 @@ func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httpr
 }
 
 func (u *UserService) Validate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	_, tokenString, err := ExtractCredential(r)
+	credential, tokenString, err := ExtractCredential(r)
 	if err != nil {
 		HandleResponse(w, nil, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// TODO: check if app is authorized
+	// check if app is authorized
+	if !u.isAppAuthorized(credential.Application) {
+		HandleResponse(w, nil, "App is not authorized.", 401)
+		return
+	}
 
 	// if there is cookie and valid, 200 ok give user info
 	if u.redis.IsTokenValid(tokenString) {
@@ -158,4 +172,9 @@ func (u *UserService) handleWrongPassword(w http.ResponseWriter, correctUser mod
 		MaxAge: -1,
 	})
 	HandleResponse(w, nil, "Wrong email/password", 401)
+}
+
+func (u *UserService) isAppAuthorized(app model.Application) bool {
+	realApp := u.mysql.FindApplicationByClientId(app.ClientId)
+	return (realApp.ClientSecret == app.ClientSecret)
 }
