@@ -40,8 +40,13 @@ func (u *UserService) Cookie(w http.ResponseWriter, r *http.Request, params http
 }
 
 func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, tokenString, err := ExtractCredential(r)
 	user := credential.User
+	user.Role = "user"
+
+	log.Printf("%s %s (%s) want to signup.\n", user.FirstName, user.LastName, user.Email)
+
 	if err != nil {
 		HandleResponse(w, nil, err.Error(), http.StatusInternalServerError)
 		return
@@ -71,8 +76,12 @@ func (u *UserService) Signup(w http.ResponseWriter, r *http.Request, params http
 }
 
 func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, tokenString, err := ExtractCredential(r)
 	user := credential.User
+
+	log.Printf("%s:%s want to login.\n", user.Email, user.Password)
+
 	if err != nil {
 		HandleResponse(w, nil, err.Error(), http.StatusInternalServerError)
 		return
@@ -102,7 +111,11 @@ func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httpr
 }
 
 func (u *UserService) Validate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, tokenString, err := ExtractCredential(r)
+
+	log.Printf("Token %s want to be validated.\n", tokenString)
+
 	if err != nil {
 		HandleResponse(w, nil, err.Error(), http.StatusInternalServerError)
 		return

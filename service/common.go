@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	TOKEN_LIFETIME = time.Minute
+	TOKEN_LIFETIME = 1 * time.Hour
 	COOKIE_NAME    = "minisso"
 )
 
@@ -84,4 +84,10 @@ func GenerateToken(userId int64) model.Token {
 		UserId:    userId,
 		ExpiredAt: time.Now().Add(TOKEN_LIFETIME),
 	}
+}
+
+func EnableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST")
 }
