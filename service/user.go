@@ -101,7 +101,7 @@ func (u *UserService) Login(w http.ResponseWriter, r *http.Request, params httpr
 
 	// if user pass invalid, 401 wrong password
 	if correctUser := u.mysql.FindUserByEmail(user.Email); correctUser.Password != user.Password {
-		u.handleWrongPassword(w, correctUser)
+		u.handleWrongPassword(w, credential)
 		return
 	}
 
@@ -174,10 +174,10 @@ func (u *UserService) handleTokenInvalid(w http.ResponseWriter) {
 	HandleResponse(w, nil, "Token invalid", 401)
 }
 
-func (u *UserService) handleWrongPassword(w http.ResponseWriter, correctUser model.User) {
+func (u *UserService) handleWrongPassword(w http.ResponseWriter, credential model.Credential) {
 	u.mysql.CreateLogin(model.Login{
-		UserId:        correctUser.Id,
-		ApplicationId: 0, // TODO: unmockup app id
+		UserId:        credential.User.Id,
+		ApplicationId: credential.Application.Id,
 		Status:        "failed wrong password",
 	})
 	http.SetCookie(w, &http.Cookie{
