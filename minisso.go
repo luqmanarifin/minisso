@@ -32,6 +32,7 @@ func main() {
 	redisOption := getRedisOption()
 	userService := service.NewUserService(mysqlOption, redisOption)
 	applicationService := service.NewApplicationService(mysqlOption)
+	sessionService := service.NewSessionService(mysqlOption)
 
 	router := httprouter.New()
 	router.GET("/healthz", Healthz)
@@ -47,6 +48,12 @@ func main() {
 	router.POST("/services", applicationService.CreateApplication)
 	router.PUT("/services/:id", applicationService.UpdateApplication)
 	router.DELETE("/services/:id", applicationService.DeleteApplication)
+
+	router.GET("/users", sessionService.FindAllUsers)
+	router.GET("/users/:id", sessionService.FindUser)
+	router.POST("/users", sessionService.CreateUser)
+	router.PUT("/users/:id", sessionService.UpdateUser)
+	router.DELETE("/users/:id", sessionService.DeleteUser)
 
 	fmt.Println("Starting HTTP Receiver")
 	http.ListenAndServe(":1234", router)
