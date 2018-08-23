@@ -31,6 +31,7 @@ func main() {
 	mysqlOption := getMysqlOption()
 	redisOption := getRedisOption()
 	userService := service.NewUserService(mysqlOption, redisOption)
+	applicationService := service.NewApplicationService(mysqlOption)
 
 	router := httprouter.New()
 	router.GET("/healthz", Healthz)
@@ -40,6 +41,12 @@ func main() {
 	router.POST("/signup", userService.Signup)
 	router.POST("/login", userService.Login)
 	router.POST("/validate", userService.Validate)
+
+	router.GET("/services", applicationService.FindAllApplications)
+	router.GET("/services/:id", applicationService.FindApplication)
+	router.POST("/services", applicationService.CreateApplication)
+	router.PUT("/services/:id", applicationService.UpdateApplication)
+	router.DELETE("/services/:id", applicationService.DeleteApplication)
 
 	fmt.Println("Starting HTTP Receiver")
 	http.ListenAndServe(":1234", router)
