@@ -14,7 +14,8 @@ func (m *Mysql) CreateApplication(app model.Application) {
 }
 
 func (m *Mysql) FindAllApplications() []model.Application {
-	applications := make([]model.Application, 0)
+	var applications []model.Application
+	m.xorm.Find(&applications)
 	return applications
 }
 
