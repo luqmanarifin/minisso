@@ -25,7 +25,7 @@ func (m *Mysql) IsEmailExist(email string) bool {
 	return total > 0
 }
 
-func (m *Mysql) FindUserById(id int64) model.User {
+func (m *Mysql) FindUser(id int64) model.User {
 	var user = model.User{Id: id}
 	has, _ := m.xorm.Get(&user)
 	if has {
@@ -35,6 +35,10 @@ func (m *Mysql) FindUserById(id int64) model.User {
 	}
 }
 
+func (m *Mysql) FindUserById(id int64) model.User {
+	return m.FindUser(id)
+}
+
 func (m *Mysql) FindUserByEmail(email string) model.User {
 	var user = model.User{Email: email}
 	has, _ := m.xorm.Get(&user)
@@ -42,6 +46,26 @@ func (m *Mysql) FindUserByEmail(email string) model.User {
 		return user
 	} else {
 		return model.User{}
+	}
+}
+
+func (m *Mysql) FindAllUsers() []model.User {
+	var users []model.User
+	m.xorm.Find(&users)
+	return users
+}
+
+func (m *Mysql) UpdateUser(user model.User) {
+	affected, err := m.xorm.Id(user.Id).Update(&user)
+	if err != nil {
+		log.Printf("%d error %s", affected, err)
+	}
+}
+
+func (m *Mysql) DeleteUser(user model.User) {
+	affected, err := m.xorm.Id(user.Id).Delete(&model.User{})
+	if err != nil {
+		log.Printf("affected %v error %s", affected, err.Error())
 	}
 }
 
