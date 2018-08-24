@@ -24,6 +24,7 @@ func NewApplicationService(mysqlOpt database.MysqlOption) ApplicationService {
 }
 
 func (a *ApplicationService) CreateApplication(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	application := credential.Application
 
@@ -33,12 +34,14 @@ func (a *ApplicationService) CreateApplication(w http.ResponseWriter, r *http.Re
 }
 
 func (a *ApplicationService) FindAllApplications(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	applications := a.mysql.FindAllApplications()
 
 	HandleResponse(w, applications, "", 200)
 }
 
 func (a *ApplicationService) FindApplication(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	strId := params.ByName("id")
 	id, _ := strconv.ParseInt(strId, 10, 64)
 	application := a.mysql.FindApplication(id)
@@ -47,6 +50,7 @@ func (a *ApplicationService) FindApplication(w http.ResponseWriter, r *http.Requ
 }
 
 func (a *ApplicationService) UpdateApplication(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	application := credential.Application
 
@@ -56,6 +60,7 @@ func (a *ApplicationService) UpdateApplication(w http.ResponseWriter, r *http.Re
 }
 
 func (a *ApplicationService) DeleteApplication(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	application := credential.Application
 

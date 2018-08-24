@@ -24,6 +24,7 @@ func NewSessionService(mysqlOpt database.MysqlOption) SessionService {
 }
 
 func (a *SessionService) CreateUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	user := credential.User
 
@@ -33,12 +34,14 @@ func (a *SessionService) CreateUser(w http.ResponseWriter, r *http.Request, para
 }
 
 func (a *SessionService) FindAllUsers(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	users := a.mysql.FindAllUsers()
 
 	HandleResponse(w, users, "", 200)
 }
 
 func (a *SessionService) FindUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	strId := params.ByName("id")
 	id, _ := strconv.ParseInt(strId, 10, 64)
 	user := a.mysql.FindUser(id)
@@ -47,6 +50,7 @@ func (a *SessionService) FindUser(w http.ResponseWriter, r *http.Request, params
 }
 
 func (a *SessionService) UpdateUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	user := credential.User
 
@@ -56,6 +60,7 @@ func (a *SessionService) UpdateUser(w http.ResponseWriter, r *http.Request, para
 }
 
 func (a *SessionService) DeleteSession(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	user := credential.User
 
