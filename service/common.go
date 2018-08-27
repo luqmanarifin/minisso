@@ -89,5 +89,7 @@ func GenerateToken(userId int64) model.Token {
 func EnableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	(*w).Header().Set("Access-Control-Allow-Credentials", "true")
-	(*w).Header().Set("Access-Control-Allow-Methods", "POST")
+	(*w).Header().Set("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS")
+	(*w).Header().Set("Access-Control-Allow-Headers",
+		"X-CSRF-Token, Authorization, Origin, X-Requested-With, Content-Type, Accept, Cache-Control, Content-Length, Accept-Encoding")
 }

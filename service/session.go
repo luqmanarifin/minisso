@@ -59,7 +59,7 @@ func (a *SessionService) UpdateUser(w http.ResponseWriter, r *http.Request, para
 	HandleResponse(w, nil, "", 200)
 }
 
-func (a *SessionService) DeleteSession(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (a *SessionService) DeleteUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	user := credential.User

@@ -35,6 +35,9 @@ func (a *ApplicationService) CreateApplication(w http.ResponseWriter, r *http.Re
 
 func (a *ApplicationService) FindAllApplications(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	EnableCors(&w)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 	applications := a.mysql.FindAllApplications()
 
 	HandleResponse(w, applications, "", 200)
