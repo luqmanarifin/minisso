@@ -7,6 +7,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/luqmanarifin/minisso/database"
+	"github.com/luqmanarifin/minisso/model"
 )
 
 type ApplicationService struct {
@@ -27,6 +28,8 @@ func (a *ApplicationService) CreateApplication(w http.ResponseWriter, r *http.Re
 	EnableCors(&w)
 	credential, _, _ := ExtractCredential(r)
 	application := credential.Application
+	application.ClientId = GenerateString(10)
+	application.ClientSecret = GenerateString(15)
 
 	a.mysql.CreateApplication(application)
 
@@ -64,8 +67,8 @@ func (a *ApplicationService) UpdateApplication(w http.ResponseWriter, r *http.Re
 
 func (a *ApplicationService) DeleteApplication(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	EnableCors(&w)
-	credential, _, _ := ExtractCredential(r)
-	application := credential.Application
+	id, _ := strconv.ParseInt(params.ByName("id"), 10, 64)
+	application := model.Application{Id: id}
 
 	a.mysql.DeleteApplication(application)
 	HandleResponse(w, nil, "", 200)
