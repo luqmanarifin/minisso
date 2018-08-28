@@ -7,6 +7,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/luqmanarifin/minisso/database"
+	"github.com/luqmanarifin/minisso/model"
 )
 
 type SessionService struct {
@@ -61,8 +62,8 @@ func (a *SessionService) UpdateUser(w http.ResponseWriter, r *http.Request, para
 
 func (a *SessionService) DeleteUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	EnableCors(&w)
-	credential, _, _ := ExtractCredential(r)
-	user := credential.User
+	id, _ := strconv.ParseInt(params.ByName("id"), 10, 64)
+	user := model.User{Id: id}
 
 	a.mysql.DeleteUser(user)
 	HandleResponse(w, nil, "", 200)
